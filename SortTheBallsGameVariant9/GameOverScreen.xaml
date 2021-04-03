@@ -1,0 +1,48 @@
+﻿<Window x:Class="SortTheBallsGameVariant9.GameOverScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:SortTheBallsGameVariant9"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="GameOverScreen"
+        Width="260"
+        Height="250"
+        MinWidth="220"
+        MinHeight="220"
+        mc:Ignorable="d">
+    <Grid Margin="10">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label x:Name="GameOverStateHeader"
+               HorizontalAlignment="Center"
+               FontSize="18">
+            Победа
+        </Label>
+        <TextBlock x:Name="GameOverScreenText"
+                   Grid.Row="1"
+                   TextWrapping="Wrap">
+            Вам удалось справиться с задачей за отведенное количество ходов. Так держать!
+        </TextBlock>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button Margin="5"
+                    Padding="10"
+                    Click="GoToMainMenuButton_Click">
+                Главное меню
+            </Button>
+            <Button Grid.Column="1"
+                    Margin="5"
+                    Padding="10"
+                    Click="NewGameButton_Click">
+                Новая игра
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

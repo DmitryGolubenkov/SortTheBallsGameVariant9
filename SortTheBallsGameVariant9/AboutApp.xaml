@@ -5,30 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SortTheBallsGameVariant9"
         mc:Ignorable="d"
-        Title="О программе" Height="240" Width="320">
-    <Grid Margin="8">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
+        Title="О программе" Height="400" Width="600" MinHeight="350" MinWidth="450">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
 
-        <TextBlock TextWrapping="Wrap" TextAlignment="Justify" Margin="5">
-            <TextBlock.Text>
-                Правила игры: вдоль доски расположены лунки, и в каждой лунке лежит шар черного или белого цвета.
-                Одним ходом разрешается менять местами два любых шара.
-                Требуется добиться того, чтобы сначала шли белые шары, а за ними - черные, за N/2 ходов, где N - количество шаров.
-            </TextBlock.Text>
+            <StackPanel Grid.Row="0">
+                <Label FontSize="16" FontWeight="Bold">Правила игры</Label>
+                <TextBlock TextWrapping="Wrap" TextAlignment="Justify" Margin="5">
+                    <TextBlock.Text>
+                        Вдоль доски расположены лунки, и в каждой лунке лежит шар черного или белого цвета.
+                        Одним ходом разрешается менять местами два любых шара.
+                        Требуется добиться того, чтобы сначала шли белые шары, а за ними - черные, за N/2 ходов, где N - количество шаров.
+                    </TextBlock.Text>
+                </TextBlock>
+            </StackPanel>
+            <Separator Grid.Row="1"></Separator>
+            <StackPanel Grid.Row="2">
+                <Label FontSize="16" FontWeight="Bold">Управление</Label>
+                <TextBlock TextWrapping="Wrap" TextAlignment="Justify" Margin="5">
+                    <TextBlock.Text>
+                        Как играть: управление игрой происходит с помощью мышки. Нажмите на шар, чтобы выбрать его. Затем нажмите на шар другого цвета, чтобы поменять их местами.
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap" TextAlignment="Justify" Margin="5">
+                    <TextBlock.Text>
+                        Компьютер управляет игрой самостоятельно, выполняя 1 ход в секунду.
+                    </TextBlock.Text>
+                </TextBlock>
+            </StackPanel>
+            <Separator Grid.Row="3"></Separator>
+            <StackPanel Grid.Row="4">
+                <Label FontSize="16" FontWeight="Bold">Условие победы</Label>
+                <TextBlock TextWrapping="Wrap" TextAlignment="Justify" Margin="5">
+                    Шарики должны быть расположены в порядке сначала белые, потом чёрные" менее, чем за N/2 ходов, где N - количество шаров.
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 
-        </TextBlock>
-        <Separator Grid.Row="1"></Separator>
-        <TextBlock TextWrapping="Wrap" TextAlignment="Justify" Margin="5">
-            <Grid.Row>2</Grid.Row>
-            <TextBlock.Text>
-                Как играть: управление игрой происходит с помощью мышки. Нажмите на шар, чтобы выбрать его. Затем нажмите на шар другого цвета, чтобы поменять их местами.
-            </TextBlock.Text>
-        </TextBlock>
-    </Grid>
-    
-    
 </Window>

@@ -5,18 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SortTheBallsGameVariant9"
         mc:Ignorable="d"
-        Title="AboutAuthor" Height="170" Width="220">
-    <DockPanel Margin="10">
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>-->
+        Title="Об авторе" Height="180" Width="320" ResizeMode="NoResize">
+    <DockPanel Margin="10" LastChildFill="False">
 
         <Label DockPanel.Dock="Top">Разработчик программы: Голубенков Дмитрий</Label>
         <Label DockPanel.Dock="Top">Группа: ИВБО-06-18.</Label>
         <Label DockPanel.Dock="Top">Почта для связи: dmitry.golubenkov@gmail.com</Label>
 
-        <Label HorizontalAlignment="Center" DockPanel.Dock="Bottom">2021 г.</Label>
+        <Label HorizontalAlignment="Center" DockPanel.Dock="Bottom" Height="Auto">2021 г.</Label>
     </DockPanel>
 </Window>

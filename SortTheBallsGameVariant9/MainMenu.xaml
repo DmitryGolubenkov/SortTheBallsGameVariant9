@@ -1,0 +1,58 @@
+﻿<Window x:Class="SortTheBallsGameVariant9.MainMenu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:SortTheBallsGameVariant9"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="Шарики и лунки"
+        Width="400"
+        Height="370"
+        ResizeMode="CanMinimize"
+        mc:Ignorable="d">
+    <DockPanel LastChildFill="False">
+        <Label Margin="10"
+               Padding="10"
+               HorizontalAlignment="Center"
+               DockPanel.Dock="Top"
+               FontSize="35">
+            Шарики и лунки
+        </Label>
+        <Button x:Name="ContinueGameButton"
+                Width="190"
+                Margin="10"
+                Padding="5"
+                Click="ContinueGameButton_Click"
+                DockPanel.Dock="Top"
+                IsEnabled="False">
+            Продолжить игру
+        </Button>
+        <Button Width="190"
+                Margin="10"
+                Padding="5"
+                Click="NewGameButton_Click"
+                DockPanel.Dock="Top">
+            Новая игра
+        </Button>
+        <Button Width="190"
+                Margin="10"
+                Padding="5"
+                Click="AboutGameButton_Click"
+                DockPanel.Dock="Top">
+            Описание игры
+        </Button>
+        <Button Width="190"
+                Margin="10"
+                Padding="5"
+                Click="AuthorButton_Click"
+                DockPanel.Dock="Top">
+            Об авторе
+        </Button>
+        <Button Width="190"
+                Margin="10"
+                Padding="5"
+                Click="ExitButton_Click"
+                DockPanel.Dock="Top">
+            Выход
+        </Button>
+    </DockPanel>
+</Window>
