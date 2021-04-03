@@ -2,25 +2,43 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SortTheBallsGameVariant9"
-        mc:Ignorable="d"
-        Title="NewGameSettings" Height="190" Width="280"
-        ResizeMode="NoResize">
-    <DockPanel LastChildFill="False" Margin="10">
-        <Label DockPanel.Dock="Top" FontSize="14" FontWeight="SemiBold">Настройки новой игры</Label>
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="NewGameSettings"
+        Width="320"
+        Height="190"
+        ResizeMode="NoResize"
+        mc:Ignorable="d">
+    <DockPanel Margin="10" LastChildFill="False">
+        <Label DockPanel.Dock="Top"
+               FontSize="14"
+               FontWeight="SemiBold">
+            Настройки новой игры
+        </Label>
         <DockPanel DockPanel.Dock="Top" LastChildFill="True">
-            <Label DockPanel.Dock="Left">Количество шаров и лунок: </Label>
-            <TextBox DockPanel.Dock="Left" Width="80" Height="20" x:Name="CountTextBox"></TextBox>
+            <Label DockPanel.Dock="Left">Количество шаров и лунок (2-50):</Label>
+            <TextBox x:Name="CountTextBox"
+                     Width="80"
+                     Height="20"
+                     DockPanel.Dock="Left" />
         </DockPanel>
         <Grid DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-        <Button Margin="3" Padding="5" Click="ReturnButton_Click">Отмена</Button>
-            <Button Grid.Column="1" Margin="3" Padding="5" Click="NewGameStart_Click">Начать</Button>
+            <Button Margin="3"
+                    Padding="5"
+                    Click="ReturnButton_Click">
+                Отмена
+            </Button>
+            <Button Grid.Column="1"
+                    Margin="3"
+                    Padding="5"
+                    Click="NewGameStart_Click">
+                Начать
+            </Button>
         </Grid>
     </DockPanel>
 </Window>

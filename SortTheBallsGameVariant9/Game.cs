@@ -67,14 +67,30 @@ namespace SortTheBallsGameVariant9
         /// <param name="ballsCount">Количество шаров на поле</param>
         private void GenerateNewField(in int ballsCount)
         {
-            Balls = new Ball[ballsCount];
-            _random = new Random(Guid.NewGuid().GetHashCode() + Environment.TickCount);
-            for (var ballIndex = 0; ballIndex < Balls.Length; ballIndex++)
-                Balls[ballIndex] = Convert.ToBoolean(_random.Next(0, 2)) ? Ball.Black : Ball.White;
+            while (true)
+            {
+                int blackCount = 0;
+                int whiteCount = 0;
+                Balls = new Ball[ballsCount];
+                _random = new Random(Guid.NewGuid().GetHashCode() + Environment.TickCount);
+                for (var ballIndex = 0; ballIndex < Balls.Length; ballIndex++)
+                {
+                    Balls[ballIndex] = Convert.ToBoolean(_random.Next(0, 2)) ? Ball.Black : Ball.White;
+                    if (Balls[ballIndex] == Ball.Black)
+                        blackCount++;
+                    else
+                        whiteCount++;
+                }
+                if(blackCount != 0 && whiteCount != 0 && NotAlreadySolved())
+                    break;
+            }
+        }
 
-            //TODO: написать проверку на то, что массив не должен состоять из одинаковых элементов
-            //Есть вероятность, что игра будет создана только с чёрными или только с берыми шариками. Требуется исключить это.
-            //Если поле было создано именно таким - нужно его пересоздать.
+        private bool NotAlreadySolved()
+        {
+            if (CheckGameOver() == GameState.Win)
+                return false;
+            return true;
         }
 
         /// <summary>

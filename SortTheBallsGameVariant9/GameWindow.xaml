@@ -5,8 +5,10 @@
         xmlns:local="clr-namespace:SortTheBallsGameVariant9"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         Title="Перемести шарики"
-        Width="800"
+        Width="700"
         Height="450"
+        MinWidth="600"
+        MinHeight="420"
         mc:Ignorable="d">
     <Grid>
 
@@ -18,8 +20,10 @@
         <DockPanel Height="Auto" LastChildFill="False">
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_Игра">
-                    <MenuItem Header="_Новая игра" />
-                    <MenuItem Click="SaveGameButton_OnClick" Header="_Сохранить игру" />
+                    <MenuItem Click="NewGameButton_OnClick" Header="_Новая игра" />
+                    <MenuItem Name="SaveGameButton"
+                              Click="SaveGameButton_OnClick"
+                              Header="_Сохранить игру" />
                     <MenuItem Checked="ComputerPlay_Enable"
                               Header="_Включить компьютера-игрока"
                               IsCheckable="True" />
@@ -33,22 +37,32 @@
             </Menu>
         </DockPanel>
         <DockPanel Grid.Row="1"
-                   Margin="20"
+                   Margin="15"
                    LastChildFill="True">
             <Label x:Name="TurnNumberLabel"
                    DockPanel.Dock="Top"
-                   FontSize="20">
+                   FontSize="18">
                 Ход:
             </Label>
             <Label x:Name="TurnsLeftLabel"
                    DockPanel.Dock="Top"
-                   FontSize="20">
+                   FontSize="18">
                 Осталось ходов:
             </Label>
+            <TextBlock Margin="15"
+                       DockPanel.Dock="Top"
+                       FontSize="14">
+                Напоминание: сначала должны идти белые, а затем - черные шарики.
+            </TextBlock>
 
-            <Canvas x:Name="GameCanvas"
-                    Background="AntiqueWhite"
-                    DockPanel.Dock="Bottom" />
+            <ScrollViewer Name="CanvasScrollViewer"
+                          DockPanel.Dock="Top"
+                          HorizontalScrollBarVisibility="Visible"
+                          VerticalScrollBarVisibility="Disabled">
+                <Canvas x:Name="GameCanvas"
+                        Width="Auto"
+                        Height="Auto" />
+            </ScrollViewer>
         </DockPanel>
     </Grid>
 </Window>

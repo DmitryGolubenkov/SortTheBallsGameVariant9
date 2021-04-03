@@ -26,6 +26,7 @@ namespace SortTheBallsGameVariant9
 
             if (state == Game.GameState.Win)
             {
+                this.Title = "Победа!";
                 GameOverStateHeader.Content = "Победа";
                 GameOverStateHeader.Foreground = Brushes.LimeGreen;
                 GameOverScreenText.Text =
@@ -34,6 +35,7 @@ namespace SortTheBallsGameVariant9
             }
             else
             {
+                this.Title = "Поражение";
                 GameOverStateHeader.Content = "Поражение";
                 GameOverStateHeader.Foreground = Brushes.DarkRed;
                 GameOverScreenText.Text =

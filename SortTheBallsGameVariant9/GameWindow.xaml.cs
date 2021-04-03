@@ -12,6 +12,7 @@ namespace SortTheBallsGameVariant9
     public partial class GameWindow : Window
     {
         private Game _game;
+        private bool _gameInProgress = true;
         private int _selectedBall = -1;
 
         public GameWindow(int ballsCount)
@@ -22,12 +23,69 @@ namespace SortTheBallsGameVariant9
             Render();
         }
 
-        private readonly int ballSize = 65; //Размер шара
-        private readonly int holeSize = 80; //Размер лунки
-        private readonly int segmentSize = 90; //Ширина одного сегмента (лунка + шар). Высота зависит от высоты лунки.
-        private readonly SolidColorBrush blackBrush = new SolidColorBrush(Color.FromRgb(0, 0, 0));
-        private readonly SolidColorBrush whiteBrush = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+        private const double ballSize = 65; //Размер шара
+        private const double holeSize = 80; //Размер лунки
+        private const double segmentSize = 90; //Ширина одного сегмента (лунка + шар). Высота зависит от высоты лунки.
+        private const double topOffset=30; //Отступ от верхней границы при рендере лунок и шаров 
 
+        private RadialGradientBrush _holeBrush;
+        private RadialGradientBrush HoleBrush
+        {
+            get
+            {
+                if (_holeBrush is null)
+                {
+                    var gradientStops = new GradientStopCollection
+                    {
+                        new GradientStop(Color.FromRgb(80, 20, 0), 0.0),
+                        new GradientStop(Color.FromRgb(51, 9, 0), 0.7),
+                        new GradientStop(Color.FromRgb(41, 7, 0), 1)
+                    };
+                    _holeBrush = new RadialGradientBrush(gradientStops);
+                }
+
+                return _holeBrush;
+            }
+        }
+
+        private RadialGradientBrush _whiteBallBrush;
+        private RadialGradientBrush WhiteBallBrush
+        {
+            get
+            {
+                if (_whiteBallBrush is null)
+                {
+                    var gradientStops = new GradientStopCollection
+                    {
+                        new GradientStop(Color.FromRgb(250, 250, 250), 0.0),
+                        new GradientStop(Color.FromRgb(140, 140, 140), 0.4),
+                        new GradientStop(Color.FromRgb(110, 110, 110), 1)
+                    };
+                    _whiteBallBrush = new RadialGradientBrush(gradientStops) {GradientOrigin = new Point(0.75, 0.25)};
+                }
+                return _whiteBallBrush;
+            }
+        }
+
+
+        private RadialGradientBrush _blackBallBrush;
+        private RadialGradientBrush BlackBallBrush
+        {
+            get
+            {
+                if (_blackBallBrush is null)
+                {
+                    var gradientStops = new GradientStopCollection
+                    {
+                        new GradientStop(Color.FromRgb(250, 250, 250), 0.0),
+                        new GradientStop(Color.FromRgb(60, 60, 60), 0.4),
+                        new GradientStop(Color.FromRgb(10, 10, 10), 1)
+                    };
+                    _blackBallBrush = new RadialGradientBrush(gradientStops) {GradientOrigin = new Point(0.75, 0.25)};
+                }
+                return _blackBallBrush;
+            }
+        }
         public GameWindow(GameSave savedGame)
         {
             InitializeComponent();
@@ -37,14 +95,15 @@ namespace SortTheBallsGameVariant9
 
         private void Render()
         {
-            //Создаем прямоугольник для границ
+            //Создаем прямоугольник для земли
             //Выставляем размеры относительно размера сегментов
             Rectangle holesBorderRectangle = new Rectangle
             {
                 Width = segmentSize * _game.Balls.Length,
-                Height = holeSize,
-                Stroke = Brushes.Blue,
-                StrokeThickness = 2
+                Height = holeSize*2,
+                Stroke = Brushes.DarkGreen,
+                StrokeThickness = 2,
+                Fill = Brushes.DarkGreen
             };
             GameCanvas.Children.Add(holesBorderRectangle);
 
@@ -57,16 +116,19 @@ namespace SortTheBallsGameVariant9
                 {
                     Width = holeSize,
                     Height = holeSize,
-                    Fill = Brushes.SandyBrown,
+                    Fill = HoleBrush,
                     StrokeThickness = 0
                 };
-                Canvas.SetLeft(hole, index * segmentSize+(segmentSize-holeSize)/2);
+                Canvas.SetLeft(hole, index * segmentSize+(segmentSize-holeSize)/2f);
+                
+                Canvas.SetTop(hole, topOffset);
                 //Шар
                 var ballType = _game.Balls[index];
 
+
                 int offset = 0;
                 if (index == _selectedBall) //Проверяем, является ли данный шар выделенным
-                    offset = 6;
+                    offset = 15;
 
 
                 Ellipse ball = new Ellipse
@@ -76,29 +138,39 @@ namespace SortTheBallsGameVariant9
                 };
 
                 Canvas.SetLeft(ball, index * segmentSize+(segmentSize-ballSize-offset)/2);
-                Canvas.SetTop(ball, (segmentSize - ballSize - offset) / 3.5f);
+                Canvas.SetTop(ball, (segmentSize - ballSize - offset+topOffset+5) / 2f);
                 //Выставляем цвет шара в зависимости от внутриигрового цвета
                 if (ballType == Game.Ball.Black)
                 {
-                    ball.Stroke = blackBrush;
-                    ball.Fill = blackBrush;
+                    ball.Stroke = BlackBallBrush;
+                    ball.Fill = BlackBallBrush;
                 }
                 else
                 {
-                    ball.Stroke = whiteBrush;
-                    ball.Fill = whiteBrush;
+                    ball.Stroke = WhiteBallBrush;
+                    ball.Fill = WhiteBallBrush;
                 }
+
+                if (index == _selectedBall)
+                    ball.Stroke = Brushes.DarkOrange;
+
                 ball.Tag = index; //Устанавливаем ID эллипса для того, чтобы обрабатывать события с него
                 ball.MouseUp += Ball_MouseUp;
                 //Добавляем для рендера
                 GameCanvas.Children.Add(hole);
                 GameCanvas.Children.Add(ball);
             }
+
+            GameCanvas.Width= segmentSize * _game.Balls.Length;
+            GameCanvas.Height = segmentSize;
         }
 
         
         private void Ball_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            if(!_gameInProgress)
+                return;
+
             Ellipse ball = sender as Ellipse;
             int ballId = (int)ball.Tag;
 
@@ -142,6 +214,8 @@ namespace SortTheBallsGameVariant9
 
         private void ShowLossScreen()
         {
+            SaveGameButton.IsEnabled = false;
+            _gameInProgress = false;
             GameOverScreen screen = new GameOverScreen(Game.GameState.Lost);
             screen.Owner = this;
             screen.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -150,6 +224,8 @@ namespace SortTheBallsGameVariant9
 
         private void ShowVictoryScreen()
         {
+            SaveGameButton.IsEnabled = false;
+            _gameInProgress = false;
             GameOverScreen screen = new GameOverScreen(Game.GameState.Win);
             screen.Owner = this;
             screen.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -199,6 +275,14 @@ namespace SortTheBallsGameVariant9
             {
                 MessageBox.Show("Ошибка сохранения", "Ошибка");
             }
+        }
+
+        private void NewGameButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            NewGameSettings window = new NewGameSettings();
+            window.Owner = this;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.Show();
         }
     }
 }
