@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,6 +15,8 @@ namespace SortTheBallsGameVariant9
         private Game _game;
         private bool _gameInProgress = true;
         private int _selectedBall = -1;
+        private Bot _bot;
+        private bool _isBotPlaying = false;
 
         public GameWindow(int ballsCount)
         {
@@ -26,9 +29,11 @@ namespace SortTheBallsGameVariant9
         private const double ballSize = 65; //Размер шара
         private const double holeSize = 80; //Размер лунки
         private const double segmentSize = 90; //Ширина одного сегмента (лунка + шар). Высота зависит от высоты лунки.
-        private const double topOffset=30; //Отступ от верхней границы при рендере лунок и шаров 
+        private const double topOffset = 30; //Отступ от верхней границы при рендере лунок и шаров 
+        
 
         private RadialGradientBrush _holeBrush;
+
         private RadialGradientBrush HoleBrush
         {
             get
@@ -49,6 +54,7 @@ namespace SortTheBallsGameVariant9
         }
 
         private RadialGradientBrush _whiteBallBrush;
+
         private RadialGradientBrush WhiteBallBrush
         {
             get
@@ -63,6 +69,7 @@ namespace SortTheBallsGameVariant9
                     };
                     _whiteBallBrush = new RadialGradientBrush(gradientStops) {GradientOrigin = new Point(0.75, 0.25)};
                 }
+
                 return _whiteBallBrush;
             }
         }
@@ -83,9 +90,11 @@ namespace SortTheBallsGameVariant9
                     };
                     _blackBallBrush = new RadialGradientBrush(gradientStops) {GradientOrigin = new Point(0.75, 0.25)};
                 }
+
                 return _blackBallBrush;
             }
         }
+
         public GameWindow(GameSave savedGame)
         {
             InitializeComponent();
@@ -100,7 +109,7 @@ namespace SortTheBallsGameVariant9
             Rectangle holesBorderRectangle = new Rectangle
             {
                 Width = segmentSize * _game.Balls.Length,
-                Height = holeSize*2,
+                Height = holeSize * 2,
                 Stroke = Brushes.DarkGreen,
                 StrokeThickness = 2,
                 Fill = Brushes.DarkGreen
@@ -119,8 +128,8 @@ namespace SortTheBallsGameVariant9
                     Fill = HoleBrush,
                     StrokeThickness = 0
                 };
-                Canvas.SetLeft(hole, index * segmentSize+(segmentSize-holeSize)/2f);
-                
+                Canvas.SetLeft(hole, index * segmentSize + (segmentSize - holeSize) / 2f);
+
                 Canvas.SetTop(hole, topOffset);
                 //Шар
                 var ballType = _game.Balls[index];
@@ -133,12 +142,12 @@ namespace SortTheBallsGameVariant9
 
                 Ellipse ball = new Ellipse
                 {
-                    Width = ballSize+offset,
-                    Height = ballSize+offset,
+                    Width = ballSize + offset,
+                    Height = ballSize + offset,
                 };
 
-                Canvas.SetLeft(ball, index * segmentSize+(segmentSize-ballSize-offset)/2);
-                Canvas.SetTop(ball, (segmentSize - ballSize - offset+topOffset+5) / 2f);
+                Canvas.SetLeft(ball, index * segmentSize + (segmentSize - ballSize - offset) / 2);
+                Canvas.SetTop(ball, (segmentSize - ballSize - offset + topOffset + 5) / 2f);
                 //Выставляем цвет шара в зависимости от внутриигрового цвета
                 if (ballType == Game.Ball.Black)
                 {
@@ -161,18 +170,18 @@ namespace SortTheBallsGameVariant9
                 GameCanvas.Children.Add(ball);
             }
 
-            GameCanvas.Width= segmentSize * _game.Balls.Length;
+            GameCanvas.Width = segmentSize * _game.Balls.Length;
             GameCanvas.Height = segmentSize;
         }
 
-        
+
         private void Ball_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if(!_gameInProgress)
+            if (!_gameInProgress)
                 return;
 
             Ellipse ball = sender as Ellipse;
-            int ballId = (int)ball.Tag;
+            int ballId = (int) ball.Tag;
 
             //----
             //Если шар не выбран - выбираем.
@@ -199,12 +208,13 @@ namespace SortTheBallsGameVariant9
                     MessageBox.Show("Невозможно поменять местами шары одного цвета.");
                 }
             }
+
             Render();
         }
 
         private void SetTurnsLeftNumber(int turnsLeft)
         {
-            TurnsLeftLabel.Content = "Осталось ходов: "+ turnsLeft.ToString();
+            TurnsLeftLabel.Content = "Осталось ходов: " + turnsLeft.ToString();
         }
 
         private void SetTurnNumber(int currentTurn)
@@ -239,6 +249,7 @@ namespace SortTheBallsGameVariant9
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
         }
+
         private void AboutAuthor_Click(object sender, RoutedEventArgs e)
         {
             AboutAuthor window = new AboutAuthor();
@@ -247,12 +258,23 @@ namespace SortTheBallsGameVariant9
             window.Show();
         }
 
-        private void ComputerPlay_Enable(object sender, RoutedEventArgs e)
+        private async void ComputerPlayTrigger_Set(object sender, RoutedEventArgs e)
         {
-            NewGameSettings window = new NewGameSettings();
-            window.Owner = this;
-            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            window.Show();
+            if(_bot is null)
+                _bot = new Bot();
+
+            _isBotPlaying = ((MenuItem) sender).IsChecked;
+            await MakeTurnWithBot_Task();
+        }
+
+        private async Task MakeTurnWithBot_Task()
+        {
+            while (_isBotPlaying && _gameInProgress)
+            {
+                _bot.MakeTurn(_game);
+                Render();
+                await Task.Delay(1000);
+            }
         }
 
         private void GoToMainMenuButton_Click(object sender, RoutedEventArgs e)
@@ -269,7 +291,9 @@ namespace SortTheBallsGameVariant9
 
         private void SaveGameButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (SaveLoadController.SaveGameSave(new GameSave(_game.Turn, _game.TurnsLeft, _game.Balls), exception => MessageBox.Show("Ошибка сохранения: " + exception.Message + "\n\n\n" + exception.StackTrace)))
+            if (SaveLoadController.SaveGameSave(new GameSave(_game.Turn, _game.TurnsLeft, _game.Balls),
+                exception =>
+                    MessageBox.Show("Ошибка сохранения: " + exception.Message + "\n\n\n" + exception.StackTrace)))
                 MessageBox.Show("Сохранение выполнено успешно", "Успех");
             else
             {

@@ -24,7 +24,7 @@
                     <MenuItem Name="SaveGameButton"
                               Click="SaveGameButton_OnClick"
                               Header="_Сохранить игру" />
-                    <MenuItem Checked="ComputerPlay_Enable"
+                    <MenuItem Checked="ComputerPlayTrigger_Set"
                               Header="_Включить компьютера-игрока"
                               IsCheckable="True" />
                     <MenuItem Click="GoToMainMenuButton_Click" Header="_Главное меню" />
