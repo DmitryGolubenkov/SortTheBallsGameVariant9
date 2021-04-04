@@ -30,70 +30,9 @@ namespace SortTheBallsGameVariant9
         private const double holeSize = 80; //Размер лунки
         private const double segmentSize = 90; //Ширина одного сегмента (лунка + шар). Высота зависит от высоты лунки.
         private const double topOffset = 30; //Отступ от верхней границы при рендере лунок и шаров 
+
+
         
-
-        private RadialGradientBrush _holeBrush;
-
-        private RadialGradientBrush HoleBrush
-        {
-            get
-            {
-                if (_holeBrush is null)
-                {
-                    var gradientStops = new GradientStopCollection
-                    {
-                        new GradientStop(Color.FromRgb(80, 20, 0), 0.0),
-                        new GradientStop(Color.FromRgb(51, 9, 0), 0.7),
-                        new GradientStop(Color.FromRgb(41, 7, 0), 1)
-                    };
-                    _holeBrush = new RadialGradientBrush(gradientStops);
-                }
-
-                return _holeBrush;
-            }
-        }
-
-        private RadialGradientBrush _whiteBallBrush;
-
-        private RadialGradientBrush WhiteBallBrush
-        {
-            get
-            {
-                if (_whiteBallBrush is null)
-                {
-                    var gradientStops = new GradientStopCollection
-                    {
-                        new GradientStop(Color.FromRgb(250, 250, 250), 0.0),
-                        new GradientStop(Color.FromRgb(140, 140, 140), 0.4),
-                        new GradientStop(Color.FromRgb(110, 110, 110), 1)
-                    };
-                    _whiteBallBrush = new RadialGradientBrush(gradientStops) {GradientOrigin = new Point(0.75, 0.25)};
-                }
-
-                return _whiteBallBrush;
-            }
-        }
-
-
-        private RadialGradientBrush _blackBallBrush;
-        private RadialGradientBrush BlackBallBrush
-        {
-            get
-            {
-                if (_blackBallBrush is null)
-                {
-                    var gradientStops = new GradientStopCollection
-                    {
-                        new GradientStop(Color.FromRgb(250, 250, 250), 0.0),
-                        new GradientStop(Color.FromRgb(60, 60, 60), 0.4),
-                        new GradientStop(Color.FromRgb(10, 10, 10), 1)
-                    };
-                    _blackBallBrush = new RadialGradientBrush(gradientStops) {GradientOrigin = new Point(0.75, 0.25)};
-                }
-
-                return _blackBallBrush;
-            }
-        }
 
         public GameWindow(GameSave savedGame)
         {
@@ -125,7 +64,7 @@ namespace SortTheBallsGameVariant9
                 {
                     Width = holeSize,
                     Height = holeSize,
-                    Fill = HoleBrush,
+                    Fill = IngameCustomBrushes.HoleBrush,
                     StrokeThickness = 0
                 };
                 Canvas.SetLeft(hole, index * segmentSize + (segmentSize - holeSize) / 2f);
@@ -151,13 +90,13 @@ namespace SortTheBallsGameVariant9
                 //Выставляем цвет шара в зависимости от внутриигрового цвета
                 if (ballType == Game.Ball.Black)
                 {
-                    ball.Stroke = BlackBallBrush;
-                    ball.Fill = BlackBallBrush;
+                    ball.Stroke = IngameCustomBrushes.BlackBallBrush;
+                    ball.Fill = IngameCustomBrushes.BlackBallBrush;
                 }
                 else
                 {
-                    ball.Stroke = WhiteBallBrush;
-                    ball.Fill = WhiteBallBrush;
+                    ball.Stroke = IngameCustomBrushes.WhiteBallBrush;
+                    ball.Fill = IngameCustomBrushes.WhiteBallBrush;
                 }
 
                 if (index == _selectedBall)
