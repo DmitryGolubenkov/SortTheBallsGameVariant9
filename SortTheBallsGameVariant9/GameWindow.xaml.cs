@@ -8,7 +8,7 @@ using System.Windows.Shapes;
 namespace SortTheBallsGameVariant9
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for GameWindow.xaml
     /// </summary>
     public partial class GameWindow : Window
     {
